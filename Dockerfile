@@ -21,7 +21,9 @@ RUN go get github.com/tools/godep && \
     go build && \
     ln -s /opt/go/src/github.com/QubitProducts/bamboo /var/bamboo && \
     mkdir -p /run/haproxy && \
-    mkdir -p /var/log/supervisor
+    mkdir -p /var/log/supervisor && \
+    echo "net.ipv4.ip_nonlocal_bind=1" >> /etc/sysctl.conf && \
+    sysctl -p
 
 VOLUME /var/log/supervisor
 

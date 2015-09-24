@@ -11,3 +11,4 @@ node_modules
 builder/build
 *.sublime-project
 output
+/.project
