@@ -21,7 +21,7 @@ RUN go get github.com/tools/godep && \
     go build && \
     ln -s /opt/go/src/github.com/QubitProducts/bamboo /var/bamboo && \
     mkdir -p /run/haproxy && \
-    mkdir -p /var/log/supervisor &&
+    mkdir -p /var/log/supervisor
 
 VOLUME /var/log/supervisor
 
