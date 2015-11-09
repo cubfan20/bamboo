@@ -254,7 +254,7 @@ func FetchApps(maraconf configuration.Marathon) (AppList, error) {
 
 	// try all configured endpoints until one succeeds
 	for _, url := range maraconf.Endpoints() {
-		applist, err = _fetchApps(url)
+		applist, err = _fetchApps(url, maraconf.User, maraconf.Password)
 		if err == nil {
 			return applist, err
 		}
