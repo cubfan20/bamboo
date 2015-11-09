@@ -100,8 +100,14 @@ type marathonHealthCheck struct {
 	PortIndex int    `json:"portIndex"`
 }
 
-func fetchMarathonApps(endpoint string) (map[string]marathonApp, error) {
-	response, err := http.Get(endpoint + "/v2/apps")
+func fetchMarathonApps(endpoint string, username string, password string) (map[string]marathonApp, error) {
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", endpoint + "/v2/apps", nil)
+	req.Header.Add("Accept", "application/json")
+	if (len(username)>0 && len(password)>0) {
+		req.SetBasicAuth(username, password)
+	}
+	response, err := client.Do(req)
 
 	if err != nil {
 		return nil, err
@@ -129,10 +135,13 @@ func fetchMarathonApps(endpoint string) (map[string]marathonApp, error) {
 	return dataById, nil
 }
 
-func fetchTasks(endpoint string) (map[string][]marathonTask, error) {
+func fetchTasks(endpoint string, username string, password string) (map[string][]marathonTask, error) {
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", endpoint+"/v2/tasks", nil)
 	req.Header.Add("Accept", "application/json")
+	if (len(username)>0 && len(password)>0) {
+		req.SetBasicAuth(username, password)
+	}
 	response, err := client.Do(req)
 
 	var tasks marathonTasks
@@ -254,13 +263,13 @@ func FetchApps(maraconf configuration.Marathon) (AppList, error) {
 	return nil, err
 }
 
-func _fetchApps(url string) (AppList, error) {
-	tasks, err := fetchTasks(url)
+func _fetchApps(url string, username string, password string) (AppList, error) {
+	tasks, err := fetchTasks(url, username, password)
 	if err != nil {
 		return nil, err
 	}
 
-	marathonApps, err := fetchMarathonApps(url)
+	marathonApps, err := fetchMarathonApps(url, username, password)
 	if err != nil {
 		return nil, err
 	}
