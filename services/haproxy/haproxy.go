@@ -5,11 +5,14 @@ import (
 	conf "github.com/QubitProducts/bamboo/configuration"
 	"github.com/QubitProducts/bamboo/services/marathon"
 	"github.com/QubitProducts/bamboo/services/service"
+	"os"
+	"strings"
 )
 
 type templateData struct {
 	Apps     marathon.AppList
 	Services map[string]service.Service
+	Env      map[string]string
 }
 
 func GetTemplateData(config *conf.Configuration, conn *zk.Conn) (interface{}, error) {
@@ -25,6 +28,12 @@ func GetTemplateData(config *conf.Configuration, conn *zk.Conn) (interface{}, er
 	if err != nil {
 		return nil, err
 	}
+	
+	env := make(map[string]string)
+	for _, i := range os.Environ() {
+		sep := strings.Index(i, "=")
+		env[i[0:sep]] = i[sep+1:]
+	}
 
-	return templateData{apps, services}, nil
+	return templateData{apps, services, env}, nil
 }
