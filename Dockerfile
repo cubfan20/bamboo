@@ -3,9 +3,9 @@ FROM ubuntu:14.04
 ENV DEBIAN_FRONTEND noninteractive
 ENV GOPATH /opt/go
 
-RUN add-apt-repository -y ppa:vbernat/haproxy-1.5 && \
- 	apt-get update -yqq && \
+RUN apt-get update -yqq && \
  	apt-get install -yqq software-properties-common && \
+ 	add-apt-repository -y ppa:vbernat/haproxy-1.5 && \
     apt-get install -yqq haproxy golang git mercurial supervisor keepalived && \
     rm -rf /var/lib/apt/lists/*
 
